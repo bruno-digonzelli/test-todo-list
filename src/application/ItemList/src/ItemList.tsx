@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Table, Td, Tr } from '@chakra-ui/table';
 import {CheckIcon, DeleteIcon} from '@chakra-ui/icons';
@@ -19,6 +19,7 @@ interface IItemListProps {
 const ItemList = ({loadItemsService, updateItemsService, deleteItemsService, createItemService}: IItemListProps): JSX.Element => {
   const {data: items, mutate}= useSWR('items', async () => {
     const items = await loadItems(loadItemsService)
+
     return items;
   }, {
     revalidateOnFocus: false
@@ -80,42 +81,45 @@ const ItemList = ({loadItemsService, updateItemsService, deleteItemsService, cre
   }
 
   return (
-    items ? (
-      <Box>
-        <Table>
-          <Tbody>
-            {items.map((item, index) => {
-              const {text, isCompleted} = item;
+    <>
+      {items ? (
+        <Box>
+          <Table>
+            <Tbody>
+              {items.map((item, index) => {
+                const {text, isCompleted} = item;
 
-              return (
-                <Tr key={item.id} bg={isCompleted ? 'gray.200': 'blue.200'}>
-                  <Td width="80%">
-                    <Heading fontSize="3xl" textDecoration={isCompleted ? 'line-through' : 'none'}>{text}</Heading>
-                  </Td>
-                  <Td padding="1">
-                    <IconButton aria-label={`Delete item ${text}`} icon={<DeleteIcon />} onClick={() => handleDeleteItem(index)} isDisabled={isCompleted} />
-                  </Td>
-                  <Td padding="1">
-                    <IconButton aria-label={`Complete item ${text}`} icon={<CheckIcon />} onClick={() => handleUpdateItem(index)} isDisabled={isCompleted} />
-                  </Td>
-                </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
-        <form onSubmit={handleSubmit}>
-          <Flex bg="blue.100" padding="16px 24px" justifyContent="space-between">
-            <Input type="text" placeholder='Add an item' onChange={handleChange} value={newItemName} marginRight="10px" />
-            <Button type='submit'>Send</Button>
-          </Flex>
-        </form>
-      </Box>
-    ) : (
-      <Flex width="full" alignItems="center" justifyContent="center" height="container.sm">
-        <Spinner size="xl" color="pink" thickness="6px" />
+                return (
+                  <Tr key={item.id} bg={isCompleted ? 'gray.200': 'blue.200'}>
+                    <Td width="80%">
+                      <Heading fontSize="3xl" textDecoration={isCompleted ? 'line-through' : 'none'}>{text}</Heading>
+                    </Td>
+                    <Td padding="1">
+                      <IconButton aria-label={`Delete item ${text}`} icon={<DeleteIcon />} onClick={() => handleDeleteItem(index)} isDisabled={isCompleted} />
+                    </Td>
+                    <Td padding="1">
+                      <IconButton aria-label={`Complete item ${text}`} icon={<CheckIcon />} onClick={() => handleUpdateItem(index)} isDisabled={isCompleted} />
+                    </Td>
+                  </Tr>
+                )
+              })}
+            </Tbody>
+          </Table>
+        </Box>
+      ) : (
+        <Flex width="full" alignItems="center" justifyContent="center" height="container.sm">
+          <Spinner size="xl" color="pink" thickness="6px" />
+        </Flex>
+      )
+    }
+    <form onSubmit={handleSubmit}>
+      <Flex bg="blue.100" padding="16px 24px" justifyContent="space-between">
+        <Input type="text" placeholder='Add an item' onChange={handleChange} value={newItemName} marginRight="10px" />
+        <Button type='submit'>Send</Button>
       </Flex>
-    )
+    </form>
+  </>
   );
-}
+};
  
 export default ItemList;

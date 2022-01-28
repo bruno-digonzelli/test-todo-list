@@ -2,7 +2,7 @@ export const localStorageService = ({key, encoder = JSON.stringify, decoder = JS
   const LOCAL_KEY = `acid-labs--${key}`;
   
   return {
-    load: () => JSON.parse(localStorage.getItem(LOCAL_KEY) || ''),
+    load: () => JSON.parse(localStorage.getItem(LOCAL_KEY) || '"[]"'),
     save: (value: ReturnType<typeof encoder>) => localStorage.setItem(LOCAL_KEY, encoder(value))
   }
 }

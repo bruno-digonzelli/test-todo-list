@@ -5,7 +5,7 @@ export const itemsLocalStorageService = () => {
   const itemsLocalStorage = localStorageService({key: 'items' });
 
   return {
-    load: async () => {const items = JSON.parse(itemsLocalStorage.load() ?? '[]') as IItemWithId[]; return items},
+    load: async () => {const items = JSON.parse(itemsLocalStorage.load() ?? '[]') as IItemWithId[]; console.log(items); return items},
     save: async (items: IItemWithId[]) => {
       itemsLocalStorage.save(JSON.stringify(items));
       return items;
