@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Table, Td, Tr } from '@chakra-ui/table';
 import {CheckIcon, DeleteIcon} from '@chakra-ui/icons';
